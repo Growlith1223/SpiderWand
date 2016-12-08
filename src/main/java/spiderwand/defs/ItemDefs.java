@@ -10,19 +10,20 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import spiderwand.SpiderWand;
 import spiderwand.items.ItemSpiderWand;
+import spiderwand.items.ItemVortexGem;
 import spiderwand.items.ItemVortexedBlock;
+import spiderwand.items.ItemWandRod;
 import spiderwand.items.rendering.ItemRenderMesh;
 
 public class ItemDefs {
     public static ItemDefs instance = new ItemDefs();
-    public static ItemSpiderWand pickSpider;
-    public static ItemVortexedBlock vortexBlock;
 
-    public void initItems(){
-        pickSpider = new ItemSpiderWand().register("spider_wand");
-        vortexBlock = new ItemVortexedBlock().register("vortex");
-    }
-
+    // Materials
+    public static ItemVortexGem vortexGem = (ItemVortexGem) new ItemVortexGem().register("vortex_gem");
+    public static ItemWandRod wandRod = (ItemWandRod) new ItemWandRod().register("wand_rod");
+    // Tools
+    public static ItemSpiderWand pickSpider = (ItemSpiderWand) new ItemSpiderWand().register("spider_wand");
+    public static ItemVortexedBlock vortexBlock = (ItemVortexedBlock) new ItemVortexedBlock().register("vortex");
     @SideOnly(Side.CLIENT)
     public void registerTexture(Item item){
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, new ItemRenderMesh(new ModelResourceLocation(item.getRegistryName(), "inventory")));
@@ -32,5 +33,7 @@ public class ItemDefs {
     public void initItemTextures(){
         registerTexture(pickSpider);
         registerTexture(vortexBlock);
+        registerTexture(vortexGem);
+        registerTexture(wandRod);
     }
 }
