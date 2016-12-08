@@ -1,0 +1,16 @@
+[
+{
+  "modid": "spiderwand",
+  "name": "Spider Wand",
+  "description": "Moving to a new place, made easy",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Growlith1223"],
+  "credits": "",
+  "logoFile": "SpiderWandLogo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
