@@ -1,5 +1,6 @@
 package spiderwand.proxy;
 
+import spiderwand.defs.CreativeTabDefs;
 import spiderwand.defs.ItemDefs;
 
 /**
@@ -7,7 +8,8 @@ import spiderwand.defs.ItemDefs;
  */
 public class CommonProxy {
     public void preInit(){
-        ItemDefs.instance.initItems();
+        ItemDefs.instance.toString();
+        new CreativeTabDefs();
     }
 
     public void init(){
