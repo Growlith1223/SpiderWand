@@ -6,9 +6,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -19,16 +22,17 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import spiderwand.SpiderWand;
 import spiderwand.defs.ItemDefs;
 
-public class ItemSpiderWand extends Item {
+public class ItemSpiderWand extends ItemSpiderWandBase {
+    @Override
+    public Object[] getRecipe() {
+        return new Object[]{"RGR", " I ", " I ", 'R', Items.REDSTONE, 'G', ItemDefs.vortexGem, 'I', ItemDefs.wandRod};
+    }
+
     public ItemSpiderWand(){
         this.setCreativeTab(CreativeTabs.TOOLS);
         this.setMaxStackSize(1);
-    }
-
-    public ItemSpiderWand register(String name){
-        this.setUnlocalizedName(new ResourceLocation(SpiderWand.MODID, name).toString());
-        GameRegistry.register(this, new ResourceLocation(SpiderWand.MODID, name));
-        return this;
+        this.setMaxDamage(3);
+        this.setNoRepair();
     }
 
     @Override
@@ -58,6 +62,10 @@ public class ItemSpiderWand extends Item {
             vortexEntity.setPosition(plr.posX, plr.posY, plr.posZ);
             world.spawnEntityInWorld(vortexEntity);
             plr.swingArm(Hand);
+            item.setItemDamage(item.getItemDamage()+1);
+            if (item.getItemDamage() > item.getMaxDamage()){
+                plr.setHeldItem(Hand, new ItemStack(ItemDefs.vortexGem));
+            }
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.FAIL;

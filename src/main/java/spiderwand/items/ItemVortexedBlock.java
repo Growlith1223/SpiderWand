@@ -1,6 +1,8 @@
 package spiderwand.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -13,24 +15,36 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import spiderwand.SpiderWand;
 
-public class ItemVortexedBlock extends Item {
+import static net.minecraft.util.EnumParticleTypes.*;
+
+public class ItemVortexedBlock extends ItemSpiderWandBase{
+    @Override
+    public Object[] getRecipe() {
+        return null;
+    }
+
     public ItemVortexedBlock(){
         this.setMaxStackSize(1);
-    }
-    public ItemVortexedBlock register(String name){
-        this.setUnlocalizedName(new ResourceLocation(SpiderWand.MODID, name).toString());
-        GameRegistry.register(this, new ResourceLocation(SpiderWand.MODID, name));
-        return this;
     }
 
     @Override
     public EnumActionResult onItemUse(ItemStack item, EntityPlayer plr, World world, BlockPos pos, EnumHand Hand, EnumFacing face, float x, float y, float z) {
         //if (world.isRemote){
+        if (item.getTagCompound() == null)
+            return EnumActionResult.FAIL;
             BlockPos sidePos = face == null ? pos : pos.add(face.getDirectionVec());
             if (item.getTagCompound().hasKey("tileEntity")) {
-                world.setBlockState(sidePos, Block.getStateById(item.getTagCompound().getInteger("block")), 3);
+                Block block = Block.getBlockById(item.getTagCompound().getInteger("block"));
+                IBlockState blockState = block.getStateFromMeta(item.getTagCompound().getInteger("meta"));
+                world.setBlockState(sidePos, blockState, 3);
+
                 world.setTileEntity(sidePos, TileEntity.create(world, (NBTTagCompound) item.getTagCompound().getTag("tileEntity")));
+                //world.getBlockState(sidePos).getBlock().rotateBlock(world, sidePos, face);
                 plr.setHeldItem(Hand, null);
+                for (int i = 0; i < world.rand.nextInt(20); i++){
+                    float f5 = (plr.getRNG().nextFloat() * 2.0F - 1.0F);
+                    float f4 = (plr.getRNG().nextFloat() * 2.0F - 1.0F);
+                    plr.getEntityWorld().spawnParticle(EnumParticleTypes.CLOUD, sidePos.getX() + f5, sidePos.getY(), sidePos.getZ() + f4, (plr.getRNG().nextFloat() - 0.5f) * 0.2f, plr.getRNG().nextFloat() * 0.1f, (plr.getRNG().nextFloat() - 0.5f) * 0.2f);                }
                 return EnumActionResult.SUCCESS;
             }
         //}
