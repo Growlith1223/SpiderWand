@@ -31,7 +31,7 @@ public class ItemSpiderWand extends ItemSpiderWandBase {
     public ItemSpiderWand(){
         this.setCreativeTab(CreativeTabs.TOOLS);
         this.setMaxStackSize(1);
-        this.setMaxDamage(3);
+        this.setMaxDamage(2400);
         this.setNoRepair();
     }
 
