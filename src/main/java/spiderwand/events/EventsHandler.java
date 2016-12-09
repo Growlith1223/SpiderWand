@@ -1,9 +1,11 @@
 package spiderwand.events;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import spiderwand.items.ItemSpiderWand;
 import spiderwand.items.ItemVortexedBlock;
 
 /**
@@ -17,6 +19,12 @@ public class EventsHandler {
             if (e.getItemStack().getTagCompound() != null) {
                 if (e.getItemStack().getTagCompound().hasKey("block")) {
                     e.getToolTip().add("currently holding: \u00A7e" + new ItemStack(Block.getBlockById(e.getItemStack().getTagCompound().getInteger("block")), 1).getDisplayName());
+                }
+            }
+        }else if(e.getItemStack().getItem() instanceof ItemSpiderWand){
+            if (e.getItemStack().getTagCompound() != null) {
+                if (e.getItemStack().getTagCompound().hasKey("spiderWandCharge") && e.getItemStack().getTagCompound().hasKey("spiderWandMaxCharge")) {
+                    e.getToolTip().add("Charges: \u00A7e" + ((ItemSpiderWand)e.getItemStack().getItem()).getChargesLeft(e.getItemStack()) + " / " + ((ItemSpiderWand)e.getItemStack().getItem()).getMaxCharges(e.getItemStack()));
                 }
             }
         }

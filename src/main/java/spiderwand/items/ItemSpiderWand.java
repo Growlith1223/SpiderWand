@@ -3,6 +3,7 @@ package spiderwand.items;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +23,11 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import spiderwand.SpiderWand;
 import spiderwand.defs.ItemDefs;
 
+import java.util.List;
+
 public class ItemSpiderWand extends ItemSpiderWandBase {
+    private int charges;
+    private final int MaxCharges = 4600;
     @Override
     public Object[] getRecipe() {
         return new Object[]{"RGR", " I ", " I ", 'R', Items.REDSTONE, 'G', ItemDefs.vortexGem, 'I', ItemDefs.wandRod};
@@ -31,7 +36,8 @@ public class ItemSpiderWand extends ItemSpiderWandBase {
     public ItemSpiderWand(){
         this.setCreativeTab(CreativeTabs.TOOLS);
         this.setMaxStackSize(1);
-        this.setMaxDamage(2400);
+        this.charges = this.MaxCharges - 1;
+        this.setMaxDamage(4600);
         this.setNoRepair();
     }
 
@@ -53,8 +59,6 @@ public class ItemSpiderWand extends ItemSpiderWandBase {
             vortex.getTagCompound().setInteger("meta", world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos)));
             vortex.getTagCompound().setTag("tileEntity", (NBTBase)nbtContainer);
             vortex.setStackDisplayName("\u00A73" + vortex.getDisplayName());
-            //vortex.getTagCompound().setTag("spiderWandTileData", te.getTileData());
-            //vortex.getTagCompound().setTag("SpiderWandTileData",teTags);
             EntityItem vortexEntity = new EntityItem(world);
             vortexEntity.setEntityItemStack(vortex);
             world.removeTileEntity(pos);
@@ -62,14 +66,54 @@ public class ItemSpiderWand extends ItemSpiderWandBase {
             vortexEntity.setPosition(plr.posX, plr.posY, plr.posZ);
             world.spawnEntityInWorld(vortexEntity);
             plr.swingArm(Hand);
-            item.setItemDamage(item.getItemDamage()+1);
-            if (item.getItemDamage() > item.getMaxDamage()){
-                plr.setHeldItem(Hand, new ItemStack(ItemDefs.vortexGem));
+            if (!plr.isCreative()) {
+                item.getTagCompound().setInteger("spiderWandCharge", this.getChargesLeft(item) - 1);
+                if (this.getChargesLeft(item) > this.getMaxCharges(item)) {
+                    plr.setHeldItem(Hand, new ItemStack(ItemDefs.vortexGem));
+                }
             }
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.FAIL;
     }
+    public int getChargesLeft(ItemStack stack){
+        if (stack.getTagCompound() != null)
+            if (stack.getTagCompound().hasKey("spiderWandCharge"))
+                return stack.getTagCompound().getInteger("spiderWandCharge");
+        return 0;
+    }
 
+    public int getMaxCharges(ItemStack stack){
+        if (stack.getTagCompound() != null)
+            if (stack.getTagCompound().hasKey("spiderWandMaxCharge"))
+                return stack.getTagCompound().getInteger("spiderWandMaxCharge");
+        return 0;
+    }
 
+    @Override
+    public void onUpdate(ItemStack stack, World world, Entity entity, int p_onUpdate_4_, boolean p_onUpdate_5_) {
+        if (stack.getTagCompound() == null){
+            stack.setTagCompound(new NBTTagCompound());
+            stack.getTagCompound().setInteger("spiderWandCharge", 4599);
+            stack.getTagCompound().setInteger("spiderWandMaxCharge", 4600);
+        }
+        if (stack.getTagCompound().getInteger("spiderWandMaxCharge") - stack.getItemDamage() != stack.getTagCompound().getInteger("spiderWandCharge"))
+            stack.setItemDamage(Math.abs(stack.getTagCompound().getInteger("spiderWandMaxCharge") - stack.getTagCompound().getInteger("spiderWandCharge")));
+    }
+
+    @Override
+    public void getSubItems(Item item, CreativeTabs creativeTab, List<ItemStack> stackList) {
+        ItemStack stack = new ItemStack(item, 1);
+        stack.setTagCompound(new NBTTagCompound());
+        stack.getTagCompound().setInteger("spiderWandCharge", 1);
+        stack.getTagCompound().setInteger("spiderWandMaxCharge", 4600);
+        stack.setItemDamage(4599);
+        stackList.add(stack);
+        stack = new ItemStack(item, 1);
+        stack.setTagCompound(new NBTTagCompound());
+        stack.getTagCompound().setInteger("spiderWandCharge", 4599);
+        stack.getTagCompound().setInteger("spiderWandMaxCharge", 4600);
+        stack.setItemDamage(1);
+        stackList.add(stack);
+    }
 }
