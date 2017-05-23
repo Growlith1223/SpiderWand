@@ -1,21 +1,17 @@
 package spiderwand.items;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import spiderwand.SpiderWand;
-
-import static net.minecraft.util.EnumParticleTypes.*;
 
 public class ItemVortexedBlock extends ItemSpiderWandBase{
     @Override
@@ -28,8 +24,9 @@ public class ItemVortexedBlock extends ItemSpiderWandBase{
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack item, EntityPlayer plr, World world, BlockPos pos, EnumHand Hand, EnumFacing face, float x, float y, float z) {
+    public EnumActionResult onItemUse(EntityPlayer plr, World world, BlockPos pos, EnumHand Hand, EnumFacing face, float x, float y, float z) {
         //if (world.isRemote){
+        ItemStack item = plr.getHeldItem(Hand);
         if (item.getTagCompound() == null)
             return EnumActionResult.FAIL;
             BlockPos sidePos = face == null ? pos : pos.add(face.getDirectionVec());
@@ -40,7 +37,7 @@ public class ItemVortexedBlock extends ItemSpiderWandBase{
 
                 world.setTileEntity(sidePos, TileEntity.create(world, (NBTTagCompound) item.getTagCompound().getTag("tileEntity")));
                 //world.getBlockState(sidePos).getBlock().rotateBlock(world, sidePos, face);
-                plr.setHeldItem(Hand, null);
+                plr.setHeldItem(Hand, ItemStack.EMPTY);
                 for (int i = 0; i < world.rand.nextInt(20); i++){
                     float f5 = (plr.getRNG().nextFloat() * 2.0F - 1.0F);
                     float f4 = (plr.getRNG().nextFloat() * 2.0F - 1.0F);

@@ -1,29 +1,25 @@
 package spiderwand.items;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import spiderwand.SpiderWand;
 import spiderwand.defs.ItemDefs;
-
-import java.util.List;
 
 public class ItemSpiderWand extends ItemSpiderWandBase {
     private int charges;
@@ -42,11 +38,12 @@ public class ItemSpiderWand extends ItemSpiderWandBase {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack item, EntityPlayer plr, World world, BlockPos pos, EnumHand Hand, EnumFacing face, float x, float y, float z) {
-        if (!world.isRemote && world.getBlockState(pos).getBlock().hasTileEntity(world.getBlockState(pos))) {
+    public EnumActionResult onItemUse(EntityPlayer plr, World world, BlockPos pos, EnumHand Hand, EnumFacing face, float x, float y, float z) {
+        ItemStack item = plr.getHeldItem(Hand);
+        if (world.getBlockState(pos).getBlock().hasTileEntity(world.getBlockState(pos))) {
             ItemStack vortex = new ItemStack(ItemDefs.vortexBlock, 1);
             TileEntity te = world.getTileEntity(pos);
-            if (te == null)
+            if (te == null || !(te instanceof IInventory || te instanceof ISidedInventory))
                 return EnumActionResult.FAIL;
             NBTTagCompound nbtContainer = new NBTTagCompound();
             te.writeToNBT(nbtContainer);
@@ -61,10 +58,12 @@ public class ItemSpiderWand extends ItemSpiderWandBase {
             vortex.setStackDisplayName("\u00A73" + vortex.getDisplayName());
             EntityItem vortexEntity = new EntityItem(world);
             vortexEntity.setEntityItemStack(vortex);
-            world.removeTileEntity(pos);
-            world.setBlockToAir(pos);
-            vortexEntity.setPosition(plr.posX, plr.posY, plr.posZ);
-            world.spawnEntityInWorld(vortexEntity);
+            if(!world.isRemote) {
+                world.removeTileEntity(pos);
+                world.setBlockToAir(pos);
+                vortexEntity.setPosition(plr.posX, plr.posY, plr.posZ);
+                world.spawnEntity(vortexEntity);
+            }
             plr.swingArm(Hand);
             if (!plr.isCreative()) {
                 item.getTagCompound().setInteger("spiderWandCharge", this.getChargesLeft(item) - 1);
@@ -102,7 +101,7 @@ public class ItemSpiderWand extends ItemSpiderWandBase {
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs creativeTab, List<ItemStack> stackList) {
+    public void getSubItems(Item item, CreativeTabs creativeTab, NonNullList<ItemStack> stackList) {
         ItemStack stack = new ItemStack(item, 1);
         stack.setTagCompound(new NBTTagCompound());
         stack.getTagCompound().setInteger("spiderWandCharge", 1);
