@@ -1,0 +1,13 @@
+{
+
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+	"EEE",
+	"ETE",
+	"EEE"],
+	"key":{ "T": {"item": "minecraft:stick"},
+			"E": {"item": "minecraft:iron_ingot"}
+		},
+	"result": {"item": "spiderwand:wand_rod", "count":1}
+
+}

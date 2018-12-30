@@ -1,0 +1,14 @@
+{
+
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+	"RGR",
+	" I "
+	],
+	"key":{ "R": {"item": "minecraft:redstone"},
+			"G": {"item": "spiderwand:vortex_gem"},
+			"I": {"item": "spiderwand:wand_rod"}
+		},
+	"result": {"item": "spiderwand:spider_wand", "count":1}
+
+}
