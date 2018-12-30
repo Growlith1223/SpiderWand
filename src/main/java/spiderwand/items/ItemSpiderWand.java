@@ -98,7 +98,7 @@ public class ItemSpiderWand extends ItemSpiderWandBase {
 
     @Override
     public void getSubItems(CreativeTabs creativeTab, NonNullList<ItemStack> stackList) {
-    	if (!(creativeTab.equals(CreativeTabs.TOOLS) || creativeTab.equals(CreativeTabDefs.tabSpiderWandItems))) return;
+    	if (!(creativeTab.equals(CreativeTabs.TOOLS) || creativeTab.equals(CreativeTabDefs.tabSpiderWandItems) || creativeTab.equals(CreativeTabs.SEARCH))) return;
     	
         ItemStack stack = new ItemStack(this, 1);
         stack.setTagCompound(new NBTTagCompound());
