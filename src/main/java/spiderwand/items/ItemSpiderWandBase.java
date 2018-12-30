@@ -1,25 +1,22 @@
 package spiderwand.items;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import spiderwand.SpiderWand;
 import spiderwand.defs.CreativeTabDefs;
 
 public abstract class ItemSpiderWandBase extends Item {
-    public abstract Object[] getRecipe();
     ItemSpiderWandBase(){
         this.setCreativeTab(CreativeTabDefs.tabSpiderWandItems);
-        this.setHasSubtypes(true);
-        if (this.getRecipe() != null)
-            GameRegistry.addRecipe(new ItemStack(this, 1), this.getRecipe());
+       // this.setHasSubtypes(true);
+
     }
 
     public ItemSpiderWandBase register(String name){
         this.setUnlocalizedName(new ResourceLocation(SpiderWand.MODID, name).toString());
-        GameRegistry.register(this, new ResourceLocation(SpiderWand.MODID, name));
+        this.setRegistryName(new ResourceLocation(SpiderWand.MODID, name));
+        ForgeRegistries.ITEMS.register(this);
         return this;
     }
 }

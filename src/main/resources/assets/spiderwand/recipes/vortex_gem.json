@@ -1,0 +1,13 @@
+{
+
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+	"EEE",
+	"ETE",
+	"EEE"],
+	"key":{ "E": {"item": "minecraft:glass"},
+			"T": {"item": "minecraft:gold_ingot"}
+		},
+	"result": {"item": "spiderwand:vortex_gem", "count":1}
+
+}

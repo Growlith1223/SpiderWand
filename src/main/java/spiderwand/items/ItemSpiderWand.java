@@ -19,16 +19,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import spiderwand.defs.CreativeTabDefs;
 import spiderwand.defs.ItemDefs;
 
 public class ItemSpiderWand extends ItemSpiderWandBase {
     private int charges;
     private final int MaxCharges = 4600;
-    @Override
-    public Object[] getRecipe() {
-        return new Object[]{"RGR", " I ", " I ", 'R', Items.REDSTONE, 'G', ItemDefs.vortexGem, 'I', ItemDefs.wandRod};
-    }
-
     public ItemSpiderWand(){
         this.setCreativeTab(CreativeTabs.TOOLS);
         this.setMaxStackSize(1);
@@ -57,7 +53,7 @@ public class ItemSpiderWand extends ItemSpiderWandBase {
             vortex.getTagCompound().setTag("tileEntity", (NBTBase)nbtContainer);
             vortex.setStackDisplayName("\u00A73" + vortex.getDisplayName());
             EntityItem vortexEntity = new EntityItem(world);
-            vortexEntity.setEntityItemStack(vortex);
+            vortexEntity.setItem(vortex);
             if(!world.isRemote) {
                 world.removeTileEntity(pos);
                 world.setBlockToAir(pos);
@@ -101,14 +97,16 @@ public class ItemSpiderWand extends ItemSpiderWandBase {
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs creativeTab, NonNullList<ItemStack> stackList) {
-        ItemStack stack = new ItemStack(item, 1);
+    public void getSubItems(CreativeTabs creativeTab, NonNullList<ItemStack> stackList) {
+    	if (!(creativeTab.equals(CreativeTabs.TOOLS) || creativeTab.equals(CreativeTabDefs.tabSpiderWandItems))) return;
+    	
+        ItemStack stack = new ItemStack(this, 1);
         stack.setTagCompound(new NBTTagCompound());
         stack.getTagCompound().setInteger("spiderWandCharge", 1);
         stack.getTagCompound().setInteger("spiderWandMaxCharge", 4600);
         stack.setItemDamage(4599);
         stackList.add(stack);
-        stack = new ItemStack(item, 1);
+        stack = new ItemStack(this, 1);
         stack.setTagCompound(new NBTTagCompound());
         stack.getTagCompound().setInteger("spiderWandCharge", 4599);
         stack.getTagCompound().setInteger("spiderWandMaxCharge", 4600);

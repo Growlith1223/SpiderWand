@@ -14,11 +14,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemVortexedBlock extends ItemSpiderWandBase{
-    @Override
-    public Object[] getRecipe() {
-        return null;
-    }
-
     public ItemVortexedBlock(){
         this.setMaxStackSize(1);
     }
