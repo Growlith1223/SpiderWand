@@ -27,6 +27,10 @@ public class ItemVortexedBlock extends ItemSpiderWandBase{
             BlockPos sidePos = face == null ? pos : pos.add(face.getDirectionVec());
             if (item.getTagCompound().hasKey("tileEntity")) {
                 Block block = Block.getBlockById(item.getTagCompound().getInteger("block"));
+                
+                //3x3 blocks of chests are fun, but this is less crashy.
+                if (!block.canPlaceBlockAt(world, sidePos)) return EnumActionResult.FAIL;
+                
                 IBlockState blockState = block.getStateFromMeta(item.getTagCompound().getInteger("meta"));
                 world.setBlockState(sidePos, blockState, 3);
 
