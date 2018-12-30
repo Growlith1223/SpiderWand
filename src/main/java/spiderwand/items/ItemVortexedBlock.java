@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 public class ItemVortexedBlock extends ItemSpiderWandBase{
     public ItemVortexedBlock(){
         this.setMaxStackSize(1);
+        this.setCreativeTab(null);
     }
 
     @Override
