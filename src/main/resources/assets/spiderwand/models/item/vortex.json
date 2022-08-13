@@ -1,7 +1,0 @@
-{
-  "parent":"block/cube_column",
-  "textures": {
-    "end": "spiderwand:blocks/vortex_vert",
-    "side":"spiderwand:blocks/vortex"
-  }
-}
