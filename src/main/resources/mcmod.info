@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
+  "modid": "spiderwand",
+  "name": "Spider Wand",
   "description": "Example placeholder mod.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["Growlith1223"],
+  "credits": "",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
